@@ -530,9 +530,9 @@ summarize(sum(d[[1]]^2)/151 + sum(d[[2]]^2)/100 + sum(d[[3]]^2)/135 + sum(d[[4]]
 ((SST2-SSW2)/5)/(SSW2/715)})
 #p-value 
 mean(Fs&gt;F_OB)</code></pre>
-<pre><code>## [1] 0.308</code></pre>
+<pre><code>## [1] 0.326</code></pre>
 <pre class="r"><code> {hist(Fs,prob=T); abline(v=F_OB, col=&quot;blue&quot;, add=T)}</code></pre>
-<p><img src="/hugo-goa-demo/Project2_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" />
+<p><img src="/Project2_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" />
 Null Hypothesis: The Attack and Defense does not differ across different Generations of Pokemon.
 Alternative Hypothesis: The Attack and Defense differs for at least one Generation of Pokemon.
 Observing the results of the PERMANOVA test, we can conclude that there is a significant difference in the distribution of Attack and Defense among the Generation of Pokemon. The calculated p-value=0.302 and the observed F(-3.732512) is greater than the null distribution of F.</p>
@@ -571,16 +571,16 @@ Poke)
 <pre class="r"><code>#Plot
 P &lt;- predict(fit,Poke)
 ggplot(Poke,aes(Weight_kg_c, Speed))+geom_point()+geom_line(data=Poke, aes(y=P))</code></pre>
-<p><img src="/hugo-goa-demo/Project2_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="/Project2_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#Assumptions
 library(lmtest)
 library(sandwich)
 resid&lt;-fit$residuals
 fitv&lt;-fit$fitted.values
 ggplot()+geom_point(aes(fitv,resid))+geom_hline(yintercept=0, color=&#39;blue&#39;)</code></pre>
-<p><img src="/hugo-goa-demo/Project2_files/figure-html/unnamed-chunk-4-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="/Project2_files/figure-html/unnamed-chunk-4-2.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>ggplot()+geom_histogram(aes(resid), bins=20)</code></pre>
-<p><img src="/hugo-goa-demo/Project2_files/figure-html/unnamed-chunk-4-3.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="/Project2_files/figure-html/unnamed-chunk-4-3.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>shapiro.test(resid)</code></pre>
 <pre><code>## 
 ##  Shapiro-Wilk normality test
@@ -661,7 +661,7 @@ summary(NFit)</code></pre>
 samp_dist%&gt;%t%&gt;%as.data.frame%&gt;%summarize_all(sd)</code></pre>
 <pre><code>## (Intercept) Height_m_c Weight_kg_c
 Height_m_c:Weight_kg_c
-## 1 1.080328 2.314964 0.02261437 0.009941229</code></pre>
+## 1 1.07006 2.327419 0.02285938 0.01010944</code></pre>
 <p>Bootstrap errors are less than the robust standard errors but greater than the original standard errors.</p>
 <ul>
 <li><strong>5. Logistic Regression</strong></li>
@@ -706,11 +706,11 @@ table(predict=as.numeric(Poke$predicted&gt;.5),truth=Poke$isLegendary)%&gt;%addm
 <pre class="r"><code>#Plot
 library(plotROC)
 ggplot(Poke,aes(Height_m,predicted,color=Weight_kg))+geom_line()</code></pre>
-<p><img src="/hugo-goa-demo/Project2_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="/Project2_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>ROCplot&lt;-ggplot(Poke)+geom_roc(aes(d=isLegendary,m=predicted), n.cuts=0)+
   geom_segment(aes(x=0,xend=1,y=0,yend=1),lty=2)
 ROCplot</code></pre>
-<p><img src="/hugo-goa-demo/Project2_files/figure-html/unnamed-chunk-6-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="/Project2_files/figure-html/unnamed-chunk-6-2.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#AUC
 calc_auc(ROCplot)</code></pre>
 <pre><code>##   PANEL group       AUC

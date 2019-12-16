@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on April Baik</title>
-    <link>/hugo-goa-demo/post/</link>
+    <link>/post/</link>
     <description>Recent content in Posts on April Baik</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <lastBuildDate>Sun, 15 Dec 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/hugo-goa-demo/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>California Vacation</title>
-      <link>/hugo-goa-demo/post/california-vacation/</link>
+      <link>/post/california-vacation/</link>
       <pubDate>Sun, 15 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>/hugo-goa-demo/post/california-vacation/</guid>
+      <guid>/post/california-vacation/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Python</title>
-      <link>/hugo-goa-demo/post/python/</link>
+      <link>/post/python/</link>
       <pubDate>Sun, 15 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>/hugo-goa-demo/post/python/</guid>
+      <guid>/post/python/</guid>
       <description></description>
     </item>
     

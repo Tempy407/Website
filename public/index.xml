@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>April Baik</title>
+    <link>/hugo-goa-demo/</link>
+    <description>Recent content on April Baik</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 15 Dec 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/hugo-goa-demo/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>California Vacation</title>
+      <link>/hugo-goa-demo/post/california-vacation/</link>
+      <pubDate>Sun, 15 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/hugo-goa-demo/post/california-vacation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>/hugo-goa-demo/blog/python/</link>
+      <pubDate>Sun, 15 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/hugo-goa-demo/blog/python/</guid>
+      <description>Python is a high-level programming language used to develop various applications. In SDS348 (Computational Biology), I was given the opportunity to learn and interact with this program. Solely for the purpose of our class, we were introduced to Python scripting, functions, and expressions. What was particularly interesting to me is that for the majority of our class, we were expanding our knowledge through the use of R Studio/R Markdown. By suddenly switching to Python, we were really able to see the differences in each program.</description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>/hugo-goa-demo/post/python/</link>
+      <pubDate>Sun, 15 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/hugo-goa-demo/post/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>/hugo-goa-demo/python/</link>
+      <pubDate>Sun, 15 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/hugo-goa-demo/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CodeRag</title>
+      <link>/hugo-goa-demo/coderag/</link>
+      <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
+      
+      <guid>/hugo-goa-demo/coderag/</guid>
+      <description>Notes: This article originally appeared in CodeRag.
+Code/Rag has always been more than just another online tech blog. We strive to be part of the tech community—serving an essential, fundamental look at what’s going on in the valley. It’s why our tagline is “Know Your Code.” We think a tech news publication should know the basics. Be the source. Get down to brass tacks. We can do that because we’re part of the very ecosystem we’re reporting on.</description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/hugo-goa-demo/about/</link>
+      <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
+      
+      <guid>/hugo-goa-demo/about/</guid>
+      <description>-Projects</description>
+    </item>
+    
+    <item>
+      <title>Project 1: Exploratory Data Analysis</title>
+      <link>/hugo-goa-demo/project1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/hugo-goa-demo/project1/</guid>
+      <description>##Exploratory Data Analysis
+0. Introduction Nintendo is a widely popular and influential video game franchise that has significantly impacted the video game industry. From numerous games to consoles, Nintendo never fails to consistently introduce new products as a source for our entertainment. In 1999, Nintendo developed a crossover fighting video game named Super Smash Brothers. The game includes various characters pulled from games within the Nintendo franchise. This concept appealed to numerous players, which resulted in achieving great success for the video game.</description>
+    </item>
+    
+    <item>
+      <title>Project 2</title>
+      <link>/hugo-goa-demo/project2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/hugo-goa-demo/project2/</guid>
+      <description>Modeling  0. (Introduction)  Pokemon has been apart of our generation offering a wide variety of games and T.V shows for entertainment. A fictitious world containing monsters and battles, motivates each player to capture and train each Pokemon. With each new installment, a new generation of Pokemon are introduced widening the variety of the Pokemon population. This data set contains all the Pokemon up to Generation Six. It contains the maximum points for health, attack, defense, and speed.</description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/hugo-goa-demo/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/hugo-goa-demo/projects/</guid>
+      <description>-Project 1 Super Smash Bros Ultimate is a video game containing a wide range of characters from the Nintendo franchise. Data was extracted and wrangled in order to perform an exploratory analysis of the best character to choose from.
+-Project 2 The Pokemon series contains a large database about each monster and offers character statistics of every single one of them. With the dataset studied, we were able to model and set predictions in order to find the best statistics between each Pokemon and their type.</description>
+    </item>
+    
+  </channel>
+</rss>

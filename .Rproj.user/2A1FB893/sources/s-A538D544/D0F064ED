@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1576462853635.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "481358293",
+    "id" : "D0F064ED",
+    "lastKnownWriteTime" : 1576462859,
+    "last_content_update" : 1576462859019,
+    "path" : "~/Desktop/Website/content/Project1.Rmd",
+    "project_path" : "content/Project1.Rmd",
+    "properties" : {
+        "cursorPosition" : "19,0",
+        "scrollLine" : "15"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

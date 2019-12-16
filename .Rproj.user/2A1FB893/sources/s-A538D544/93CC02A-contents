@@ -1,0 +1,232 @@
+---
+title: "Project 2"
+author: "April Baik(ajb5328)"
+date: "11/26/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+hook_output = knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE,fig.align="center",warning=FALSE,message=FALSE,fig.width=8, fig.height=5, linewidth=60)
+options(tibble.width = 100,width = 100)
+library(tidyverse)
+```
+
+## Modeling 
+
+- **0. (Introduction)**
+
+ Pokemon has been apart of our generation offering a wide variety of games and T.V shows for entertainment. A fictitious world containing monsters and battles, motivates each player to capture and train each Pokemon.  With each new installment, a new generation of Pokemon are introduced widening the variety of the Pokemon population. This data set contains all the Pokemon up to Generation Six. It contains the maximum points for health, attack, defense, and speed. The dataset also contains the Generation number, Legendary status, gender, height(m), and weight(kg). "Type_2" was dropped because we will primarily focus on the "Type_1" of the pokemon. Speed attack and Speed Defense were also dropped since this contains more specific character statistics that we are not concerned with. The Egg groups, Mega Evolution, catch rate, and body style were also dropped since we are focusing on statistics related to the Pokemon and not statistics within the game. 
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(readr)
+Pokemon <- read_csv("pokemon_alopez247[1].csv")
+Poke <- Pokemon %>% select(-Total,-Sp_Atk,-Sp_Def,-Type_2,-Pr_Male,-Egg_Group_1,-Egg_Group_2, -hasMegaEvolution, -Catch_Rate,-Body_Style, -Color)%>%mutate(Generation=recode(Generation, "One", "Two", "Three","Four", "Five","Six"))
+```
+
+
+- **1. (MANOVA)**
+
+```{r}
+#MANOVA
+Man1 <- manova(cbind(HP, Attack, Defense, Speed, Height_m, Weight_kg)~Type_1, data=Poke)
+summary(Man1)
+#Univariate ANOVAs
+summary.aov(Man1)
+#Mean Differences
+Poke%>%group_by(Type_1)%>%summarize(mean(HP), mean(Attack), mean(Defense), mean(Speed), mean(Height_m), mean(Weight_kg))
+#Post-Hoc T-tests
+pairwise.t.test(Poke$HP,Poke$Type_1,p.adj="none")
+pairwise.t.test(Poke$Attack,Poke$Type_1,p.adj="none")
+pairwise.t.test(Poke$Defense,Poke$Type_1,p.adj="none")
+pairwise.t.test(Poke$Speed,Poke$Type_1,p.adj="none")
+pairwise.t.test(Poke$Height_m,Poke$Type_1,p.adj="none")
+pairwise.t.test(Poke$Weight_kg,Poke$Type_1,p.adj="none")
+```
+We ran 1 MANOVA, 6 ANOVA, and 108 t-tests. This came to a total of 115 tests. The adjusted alpha level is 0.05/115 = 0.00435. Through the MANOVA test we found a significant difference between 18 types of Pokemon on 17 dependent measures. The Pillai Trace=0.58, the pseudo F(102, 4218), thus the p value was less than 0.001 making it significant. Next we performed ANOVAs for each dependent variable in order to find the mean difference across groups. The results displayed that there was a significant difference in the mean HP(p <0.01), Attack(p<0.001), Defense(p<0.001), Speed(p<0.001), Height(p<0.001), and Weight(p<0.001) between the types of Pokemon. A series of post-hoc t tests were performed in order to find which groups differ. Normal and Bug type Pokemon displayed a significant difference in the mean HP. Bug, Dragon, Fighting, Ground, Rock, Water, Psychic, Normal, Ice, Grass, Ghost, Fairy, and Electric type Pokemon displayed a significant difference in mean Speed. Rock and Steel type Pokemon displayed a significant difference for mean Defense. Electric, Grass, Steel, and Bug type Pokemon displayed a significant difference in mean Speed. Psychic, Grass, Electric, and Dragon type Pokemon displayed a significant difference in mean Height. Lastly, only Steel type Pokemon displayed a significant difference in mean Weight. These differences were found after adjusting for multiple comparisons through the Bonferroni method. The probability of a type one error is equal to alpha, which is 0.05. The adjusted significance level is 0.00435. The assumptions of MANOVA in relation to random sampling/independent observations, homogeneity, and multicollinearity were unlikely met. 
+
+
+- **2. Randomization Tests**
+
+```{r}
+#Computation of Observed F
+dist <- Poke%>%select(Attack,Defense)%>%dist()
+SST <- sum(dist^2)/721
+SSW <-Poke%>%group_by(Generation)%>%select(Attack,Defense)%>%do(d=dist(.[2:3],"euclidean"))%>%ungroup()%>%summarize(sum(d[[1]]^2)/151 + sum(d[[2]]^2)/100 + sum(d[[3]]^2)/135 + sum(d[[4]]^2)/107 + sum(d[[5]]^2)/156 + sum(d[[6]]^2)/72) %>%pull
+F_OB<-((SST-SSW)/5)/(SSW/715) 
+F_OB
+#Null Distribution of F
+Fs<-replicate(1000,{
+new<-Poke%>%mutate(Generation=sample(Generation))
+SST2<- sum(dist^2)/721
+SSW2<-new%>%group_by(Generation)%>%select(Attack,Defense)%>%
+do(d=dist(.[2:3],"euclidean"))%>%ungroup()%>%
+summarize(sum(d[[1]]^2)/151 + sum(d[[2]]^2)/100 + sum(d[[3]]^2)/135 + sum(d[[4]]^2)/107 + sum(d[[5]]^2)/156 + sum(d[[6]]^2)/72) %>%pull
+((SST2-SSW2)/5)/(SSW2/715)})
+#p-value 
+mean(Fs>F_OB)
+
+ {hist(Fs,prob=T); abline(v=F_OB, col="blue", add=T)}
+```
+Null Hypothesis: The Attack and Defense does not differ across different Generations of Pokemon. 
+Alternative Hypothesis: The Attack and Defense differs for at least one Generation of Pokemon. 
+Observing the results of the PERMANOVA test, we can conclude that there is a significant difference in the distribution of Attack and Defense among the Generation of Pokemon. The calculated p-value=0.302 and the observed F(-3.732512) is greater than the null distribution of F. 
+
+- **3. Linear Regression**
+```{r}
+#Center Means
+Poke$Height_m_c<-Poke$Height_m-mean(Poke$Height_m)
+Poke$Weight_kg_c<-Poke$Weight_kg-mean(Poke$Weight_kg)
+#Linear Regression Model
+fit<- lm(Speed~Height_m_c*Weight_kg_c, data=Poke)
+summary(fit)
+#Plot
+P <- predict(fit,Poke)
+ggplot(Poke,aes(Weight_kg_c, Speed))+geom_point()+geom_line(data=Poke, aes(y=P))
+#Assumptions
+library(lmtest)
+library(sandwich)
+resid<-fit$residuals
+fitv<-fit$fitted.values
+ggplot()+geom_point(aes(fitv,resid))+geom_hline(yintercept=0, color='blue')
+ggplot()+geom_histogram(aes(resid), bins=20)
+shapiro.test(resid)
+#Robust Standard Errors
+summary(fit)$coef[,1:2]
+coeftest(fit, vcov = vcovHC(fit))[,1:2]
+#Proportion of the Variation Explained
+(sum((Poke$Speed-mean(Poke$Speed))^2)-sum(fit$residuals^2))/sum((Poke$Speed-mean(Poke$Speed))^2)
+#Main Effects
+fit2<-lm(Speed ~ Height_m_c + Weight_kg_c, data=Poke)
+summary(fit2)
+#Null Model
+NFit<-lm(Speed ~ Height_m_c, data=Poke)
+summary(NFit)
+```
+When height and weight of the Pokemon are 0, the Speed is 67.4138610. For every meter the height increases, the speed increases by 11.7151071 while holding weight constant. For every kilogram of weight , the speed increases by 0.0001194 while holding the height constant. According to the graphs and hypothesis tests, the assumption of normality, linearity, and homoskedasticity were not met. Compared to the standard errors, the robust standard errors held a greater value. This specific model explains for 0.08590895 of variation. 
+
+- **4. Regression Model with Interaction**
+```{r}
+samp_dist<-replicate(5000, {
+  boot_dat<-Poke[sample(nrow(Poke),replace=TRUE),]
+  fit3<-lm(Speed ~ Height_m_c * Weight_kg_c,data=boot_dat)
+  coef(fit3)
+  })
+samp_dist%>%t%>%as.data.frame%>%summarize_all(sd)
+```
+Bootstrap errors are less than the robust standard errors but greater than the original standard errors. 
+
+- **5. Logistic Regression**
+```{r}
+#Logistic Regression
+fit4<-glm(isLegendary~Height_m + Weight_kg, data=Poke, family=binomial(link="logit"))
+coeftest(fit4)
+#Coefficients
+exp(coef(fit4))
+#Confusion Matrix
+Poke$predicted<-predict(fit4, data=Poke, type = "response")
+table(predict=as.numeric(Poke$predicted>.5),truth=Poke$isLegendary)%>%addmargins
+#Accuracy
+(6+670)/721
+#Sensitivity(TPR)
+6/46
+#Specificity(TNR)
+670/675
+#Precision(PPV)
+6/11
+#Plot
+library(plotROC)
+ggplot(Poke,aes(Height_m,predicted,color=Weight_kg))+geom_line()
+ROCplot<-ggplot(Poke)+geom_roc(aes(d=isLegendary,m=predicted), n.cuts=0)+
+  geom_segment(aes(x=0,xend=1,y=0,yend=1),lty=2)
+ROCplot
+#AUC
+calc_auc(ROCplot)
+#CV
+class_diag<-function(probs,truth){
+
+tab<-table(factor(probs>.5,levels=c("FALSE","TRUE")),truth)
+acc=sum(diag(tab))/sum(tab)
+sens=tab[2,2]/colSums(tab)[2]
+spec=tab[1,1]/colSums(tab)[1]
+ppv=tab[2,2]/rowSums(tab)[2]
+
+if(is.numeric(truth)==FALSE & is.logical(truth)==FALSE) truth<-as.numeric(truth)-1
+
+ord<-order(probs, decreasing=TRUE)
+probs <- probs[ord]; truth <- truth[ord]
+
+TPR=cumsum(truth)/max(1,sum(truth)) 
+FPR=cumsum(!truth)/max(1,sum(!truth))
+
+dup<-c(probs[-1]>=probs[-length(probs)], FALSE)
+TPR<-c(0,TPR[!dup],1); FPR<-c(0,FPR[!dup],1)
+
+n <- length(TPR)
+auc<- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+
+data.frame(acc,sens,spec,ppv,auc)
+}
+
+set.seed(1234)
+k=10
+
+data1<-Poke[sample(nrow(Poke)),]
+folds<-cut(seq(1:nrow(Poke)),breaks=k,labels=F)
+
+diags<-NULL
+for(i in 1:k){
+train<-data1[folds!=i,]
+test<-data1[folds==i,]
+truth<-test$isLegendary
+fit6<- glm(isLegendary~Height_m + Weight_kg,data=Poke,family=binomial(link="logit"))
+probs<- predict(fit6, newdata=test, type="response")
+diags<-rbind(diags,class_diag(probs,truth))}
+
+apply(diags,2,mean)
+
+```
+
+- **6. Lasso Regression**
+```{r}
+library(glmnet)
+y<-as.matrix(Poke$isLegendary)
+x<-Poke%>%dplyr::select(-Type_1, -Name, -isLegendary, -Name,-Number,-Generation,-hasGender,-Height_m_c,-Weight_kg_c,-predicted)%>%mutate_all(scale)%>%as.matrix
+cv<-cv.glmnet(x,y,family="binomial")
+lasso<-glmnet(x,y,family="binomial",lambda=cv$lambda.1se)
+coef(lasso)
+
+set.seed(1234)
+k=10
+ 
+data1<-Poke[sample(nrow(Poke)),]
+folds<-cut(seq(1:nrow(Poke)),breaks=k,labels=F)
+ 
+diags2<-NULL
+for(i in 1:k){
+  train2<-data1[folds!=i,]
+  test2<-data1[folds==i,]
+  truth2<-test$isLegendary
+  fit7<- glm(isLegendary~HP+Attack+Defense+Speed+Height_m+Weight_kg,data=Poke,family=binomial(link="logit"))
+  probs2<- predict(fit7, newdata=test, type="response")
+  diags2<-rbind(diags2,class_diag(probs2,truth2))}
+
+```
+For this lasso regression, the categorical variables of Name, type of Pokemon, Number, isLegendary, Gender, and Generation were all dropped. The numerical values including the HP, Attack, Defense, Height, Weight and Speed were retained. AUC is less than one indicating that these numerical variables are not great predictors in whether or not a Pokemon is Legendary.
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

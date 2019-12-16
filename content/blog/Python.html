@@ -1,0 +1,31 @@
+---
+title: Python
+author: April Baik
+date: '2019-12-15'
+slug: python
+categories: []
+tags: []
+comments: no
+showcomments: yes
+showpagemeta: yes
+---
+
+
+
+<p>Python is a high-level programming language used to develop various applications. In SDS348 (Computational Biology), I was given the opportunity to learn and interact with this program. Solely for the purpose of our class, we were introduced to Python scripting, functions, and expressions. What was particularly interesting to me is that for the majority of our class, we were expanding our knowledge through the use of R Studio/R Markdown. By suddenly switching to Python, we were really able to see the differences in each program. Specifically for Python, I found that the coding language was by far more interpretive and challenging. Whereas for R Studio, the coding language is pretty intuitive based on the function you want to launch. For example, in class we specifically studied regular expressions. In order to repesent an expression that is present in a string. Each “code” was equivalent to a pattern in the string you were looking for. When it gets more complicated, like searching through a string or Url’s or IP addresses it can get overwhelming. For example, if we were given a string with a list of integers and we wanted to find all the matches of integers we will simply use the REGEX method.</p>
+<p>From this string :</p>
+<p>string2=“Jan 13 00:48:59: DROP service 68-&gt;67(udp) from 213.92.153.167 to 69.4 3.107.219, prefix: &quot;spoof iana-0/8&quot;<br />
+(in: eth0 69.43.112.233(38:f8:b7:90:45:92):68 -&gt; 217.70.100.113(00:21:87:79:9 c:d9):67 UDP len:576 ttl:64)<br />
+Jan 13 12:02:48: ACCEPT service dns from 74.125.186.208 to firewall(pub-nic-dn s), prefix: &quot;none&quot;<br />
+(in: eth0 74.125.186.208(00:1a:e3:52:5d:8e):36008 -&gt; 140.105.63.158(00:1a:9a:8 6:2e:62):53 UDP len:82 ttl:38)<br />
+Jan 13 17:44:52: DROP service 68-&gt;67(udp) from 172.45.240.237 to 217.70.177.6 0, prefix: &quot;spoof iana-0/8&quot;<br />
+(in: eth0 216.34.90.16(00:21:91:fe:a2:6f):68 -&gt; 69.43.85.253(00:07:e1:7c:53:d b):67 UDP len:328 ttl:64)<br />
+Jan 13 17:52:08: ACCEPT service http from 213.121.184.130 to firewall(pub-ni c), prefix: &quot;none&quot;<br />
+(in: eth0 213.121.184.130(00:05:2e:6a:a4:14):8504 -&gt; 140.105.63.164(00:60:11:9 2:ed:1b):80 TCP flags: ****S* len:52 ttl:109)”</p>
+<p>We code:</p>
+<p>x=re.findall(r“...”,string2)
+print(x)</p>
+<p>The output will give us all the matches (given below)</p>
+<pre><code>## [&#39;213.92.153.167&#39;, &#39;69.43.112.233&#39;, &#39;217.70.100.113&#39;, &#39;74.125.186.208&#39;, &#39;74.125.186.208&#39;, &#39;140.105.63.158&#39;, &#39;172.45.240.237&#39;, &#39;217.70.177.6&#39;, &#39;216.34.90.16&#39;, &#39;69.43.85.253&#39;, &#39;213.121.184.130&#39;, &#39;213.121.184.130&#39;, &#39;140.105.63.164&#39;]</code></pre>
+<p>Here is an image of the different regex codes that are implemented in Regex in order to calculate the corresponding values.</p>
+<p><img src="/blog/Python_files/example.png" /></p>

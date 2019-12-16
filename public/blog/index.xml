@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blogs on April Baik</title>
+    <link>/hugo-goa-demo/blog/</link>
+    <description>Recent content in Blogs on April Baik</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 15 Dec 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/hugo-goa-demo/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Python</title>
+      <link>/hugo-goa-demo/blog/python/</link>
+      <pubDate>Sun, 15 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/hugo-goa-demo/blog/python/</guid>
+      <description>Python is a high-level programming language used to develop various applications. In SDS348 (Computational Biology), I was given the opportunity to learn and interact with this program. Solely for the purpose of our class, we were introduced to Python scripting, functions, and expressions. What was particularly interesting to me is that for the majority of our class, we were expanding our knowledge through the use of R Studio/R Markdown. By suddenly switching to Python, we were really able to see the differences in each program.</description>
+    </item>
+    
+  </channel>
+</rss>

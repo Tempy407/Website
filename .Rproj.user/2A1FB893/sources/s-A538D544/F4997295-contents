@@ -1,0 +1,146 @@
+---
+title: 'Project 1: Exploratory Data Analysis'
+author: "April Baik(ajb5328)"
+date: "10/18/2019"
+output:
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Exploratory Data Analysis
+#### 0. Introduction
+
+  Nintendo is a widely popular and influential video game franchise that has significantly impacted the video game industry. From numerous games to consoles, Nintendo never fails to consistently introduce new products as a source for our entertainment. In 1999, Nintendo developed a crossover fighting video game named Super Smash Brothers. The game includes various characters pulled from games within the Nintendo franchise. This concept appealed to numerous players, which resulted in achieving great success for the video game. Nintendo continued this succession by releasing multiple installments (Super Smash Bros. Melee, Super Smash Bros. Brawl, and Super Smash Bros. for Nintendo 3DS) simultaneously with the development of multiple consoles. Most recently, Super Smash Ultimate was released in 2018 for the Nintendo Switch. With the largest range of characters offered, Super Smash Ultimate contributes to the on-going succession of this video game’s series.
+Although the video game has been developed and improved throughout multiple installments, there will always be the debate on who is the best character to choose. Each and every character has a unique set of moves, which further complicates the question at hand. Many players will argue that every character is good as long as the player truly understands and is experienced with every attribute the character offers. As someone who has played the Super Smash series throughout my childhood, I am impressed and overwhelmed by the amount of characters Super Smash Ultimate contains in the installment. For my exploratory data analysis, I will incorporate two data sets in order to find the relationship of Speed and Weight to the Rankings of each character. The first dataset was pulled from an API and the json script was transported into R. Here, the data extracted was the character run speed, fall speed, air acceleration, and Weight. The second data set was pulled from PGRU, which is the ranking of each Smash Character. Specifically, PGRU pulled data from every Smash Ultimate tournament in season one containing the best players world-wide. The metascore indicates the frequency at which the character was selected in all tournaments. The metascore rank indicates the order in most frequently selected players.The proscore indicates a frequency of character appearances in top-tier tournaments. I suspect that the fastest and heaviest characters will correlate with higher-ranking characters. A crucial element to the game is to capitalize towards your opponent when they are vulnerable. The speed and weight(strength) can be an advantageous quality for this element. Overall, I want to compare if Weight and Speed are correlated with the selection of the best players.
+
+
+#### 1. Tidying: Rearranging Wide/Long
+
+
+```{r}
+library(jsonlite)
+library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(readxl)
+
+Smash <-fromJSON("https://api.kuroganehammer.com/api/movements", flatten=TRUE)
+
+SmashMoves <- Smash %>% select(-InstanceId, -OwnerId, -Game, -Links, -Related.Smash4.Character, -Related.Smash4.Self, -Related.Ultimate.Character)
+
+SmashAttributes <-SmashMoves%>%pivot_wider(names_from="Name", values_from = "Value")%>%select(-`Max Jumps`,-`Wall Jump`,-`Wall Cling`, -'Crawl',-'Tether',-Jumpsquat, -`Soft Landing Lag`, -Gravity,-`Hard Landing Lag`, -'SH Air Time',-'FH Air Time',-'Walk Speed',-'Air Speed',-'Fast Fall Speed')
+
+TierList <- read_excel("Smash Ultimate Tier List Stats PGRU Season 1.xlsx")
+
+Ranking <- TierList%>%slice(-1:-1,-65:-65,-75,-76)%>%select(-`Meta Score %`,-`Pro Score %`,-c(7),-`3.1.0 Character Data (Season 1)`)%>%separate_rows(Character, sep="/")
+
+Ranking[43,2]<- "Bayonetta"
+Ranking[72,2]<-"BowserJr"
+Ranking[37,2]<- "CaptainFalcon"
+SmashAttributes[5,1]<-"Pokemon Trainer"
+Ranking[52,2]<- "DarkPit"
+Ranking[59,2]<-"DiddyKong"
+Ranking[39,2]<-"DonkeyKong"
+Ranking[50,2]<-"DrMario"
+Ranking[36,2]<-"DuckHunt"
+Ranking[33,2]<-"KingDedede"
+Ranking[75,2]<-"LittleMac"
+Ranking[13,2]<-"MegaMan"
+Ranking[35,2]<-"MetaKnight"
+Ranking[46,2]<-"MiiSwordFighter"
+Ranking[61,2]<-"MiiBrawler"
+Ranking[66,2]<-"MiiGunner"
+Ranking[31,2]<-"MrGameWatch"
+Ranking[28,2]<-"PAC-MAN"
+Ranking[68,2]<-"Robin"
+Ranking[55,2]<-"RosalinLuma"
+Ranking[34,2]<-"ToonLink"
+Ranking[17,2]<-"ZeroSuitSamus"
+
+```
+In order to obtain my data sets, I had to download the JSONlite package since my dataset was derived from an API. By doing so, I was able to import the data set successfully into R. This was the data, SmashAttributes. The "SmashAttributes" data set contained statistics on the characters movement speed and weight.The "Rankings" dataset contains data from PGRU, where they record statistical data for all smash tournaments containing the best smash players from around the world. For the both data sets, I deleted columns that were not relevant to the purpose of my analysis. For the "SmashAttributes" data, I spread the data sheet as there were columns with the same cells for different values in another column. I wanted to transform my data to remove duplicate rows and establish new variables. For the Rankings data set, I removed mulitple rows that were NA's. The NA's were just empty rows. The format must have been incomplete when I imported this data set. I also removed columns that did not apply to the question at hand. Next, I separated some rows that had two names per cell. Finally, I renamed multiple cells that were spelled differently compared to the other dataset. To clarify, the cells were the same value, but the minute spelling differentiation did not allow the sets to recognize them as the same character. 
+
+
+#### 2. Joining/Merging
+
+```{r}
+SmashU <- Ranking%>%inner_join(SmashAttributes, by=c("Character"="Owner"))
+```
+I joined both datasets under SmashU. They were joined by the common variable contributing to the name of the characters. However, in order to join the two columns, I had to rename the columns in order to successfully join the data sets. Since multiple characters have been implemented since the initial release of the video game. The "SmashAttributes" data lacks statistical data on the new characters released. Due to this, multiple characters were dropped since "SmashAttributes" did not have all the characters from "Rankings". "Rankings" contains characters that were released later in the year. I did an inner join since I wanted to join the "Characters" column and keep the characters that both data sets have in common. Both data sets kept all variables and dropped rows that were not present in either data.  
+
+#### 3. Wrangling
+
+```{r}
+SmashUltimate <- SmashU %>%mutate(`Pro Score S/A Tier`=case_when(`Pro Score S/A Tier`>13.2~ "Best",9.9<=`Pro Score S/A Tier`& `Pro Score S/A Tier`<=13.2~"Strong",6.6<=`Pro Score S/A Tier`&`Pro Score S/A Tier`<=9.9~"Good", 3.3<=`Pro Score S/A Tier`&`Pro Score S/A Tier`<=6.6~"Average",0<=`Pro Score S/A Tier`&`Pro Score S/A Tier`<=3.3~"Weak" ))%>%na.omit()
+
+SmashUltimate %>% filter(`Pro Score S/A Tier`=="Best")
+
+SmashUltimate%>% arrange(Weight)
+
+SmashUltimate %>% select(Character, `Meta Score Rank`, -`Meta Score Combined`,`Pro Score S/A Tier`,everything())
+
+SmashUltimate %>% mutate("Speed Score" = as.numeric(`Run Speed`)+as.numeric(`Fall Speed`) +as.numeric(`Air Acceleration`))
+
+SmashUltimate%>% group_by(`Pro Score S/A Tier`)%>%summarise(Mean_Weight=mean(as.numeric(Weight)))
+
+SmashUltimate%>%summarise(Mean_Weight=mean(as.numeric(Weight)),Sd_Weight=sd(as.numeric(Weight)),Var_Weight=var(as.numeric(Weight)),Med_Weight=median(as.numeric(Weight)),IQR_Weight=IQR(as.numeric(Weight)), min_Weigt=min(as.numeric(Weight)), max_Weight=max(as.numeric(Weight)), F_Weight=first(as.numeric(Weight)), L_Weight=last(as.numeric(Weight)))
+
+SmashUltimate%>%summarise(Mean_Run=mean(as.numeric(`Run Speed`)),Sd_Run=sd(`Run Speed`), Med_Run=median(`Run Speed`), IQR_Run=IQR(`Run Speed`), Min_Run=min(`Run Speed`), max_Run=max(`Run Speed`),F_Run=first(`Run Speed`), l_Run=last(`Run Speed`), var_Run=var(`Run Speed`))
+
+SmashUltimate%>% summarise(mean_F=mean(as.numeric(`Fall Speed`)), sd_f=sd(`Fall Speed`),med_f=median(`Fall Speed`), I_f=IQR(`Fall Speed`), min_f=min(`Fall Speed`), max_f=max(`Fall Speed`),f_f=first(`Fall Speed`),l_f=last(`Fall Speed`), var_f=var(`Fall Speed`))
+
+
+SmashUltimate %>% summarise(mean_A=mean(as.numeric(`Air Acceleration`)), sd_a=sd(`Air Acceleration`), med_a=median(`Air Acceleration`), I_a=IQR(`Air Acceleration`),min_a=min(`Air Acceleration`), max_a=max(`Air Acceleration`), f_a=first(`Air Acceleration`), l_a=last(`Air Acceleration`),var_a=var(`Air Acceleration`))
+
+SmashUltimate%>%group_by(`Pro Score S/A Tier`)%>%summarise(Mean_Weight=mean(as.numeric(Weight)),Sd_Weight=sd(as.numeric(Weight)),Var_Weight=var(as.numeric(Weight)),Med_Weight=median(as.numeric(Weight)),IQR_Weight=IQR(as.numeric(Weight)), min_Weigt=min(as.numeric(Weight)), max_Weight=max(as.numeric(Weight)), F_Weight=first(as.numeric(Weight)), L_Weight=last(as.numeric(Weight)))
+
+
+```
+At first I used mutate in order to convert my numerical variable into a categorical variable in the "SmashUltimate" data set. The "Pro Score S/A Tier" was scored on a numeric scale, which I divided by 5 based on scales online. The ranking determines the weak, good, average, strong, and best. I calculated the descriptive statistics by finding the mean, min, max, sd, var, IQR, med, first, and last of the numerical variables. For the 'filter()' calculation, the "Best" level characters were Olimar and Lucina. For 'arrange()', I saw the order of the character's weight from least to greatest.The 'select()' option showed the relationship and columns of the Meta Score combined and Pro Score. This highlights the qualification of level each character was according to the order of Meta score rank. For 'mutate()', I combined the values of Run speed, fall speed, and air acceleration in order to get an overall score of the speed of each character. Finally, I used the 'group_by()' option to look at the mean weights of each Pro Score level. What I found what was interesting was that the "Average" characters had the greates weight. I suspected for the "Strong" characters would have a greater mean. 
+
+#### 4. Visualizing 
+
+```{r}
+plot1 <- ggplot(data=SmashUltimate, aes(x=SmashUltimate$Character,y=SmashUltimate$`Meta Score Combined`,color=SmashUltimate$`Pro Score S/A Tier`))+ geom_point()
+
+plot1 + ggtitle("The Meta Score by Characters and Pro Score Category") + ylab("Meta Score Combined")+xlab("Characters")
+
+plot2 <- ggplot(data=SmashUltimate, aes(x=SmashUltimate$Character, y=SmashUltimate$Weight, color=SmashUltimate$`Pro Score S/A Tier`))+ geom_point()
+
+plot2 + ggtitle("The Weight by Characters and Pro Score Category") + ylab("Weight")+ xlab("Characters")
+
+plot3 <- ggplot(data=SmashUltimate, aes(x=SmashUltimate$Character,y=SmashUltimate$`Run Speed`, color=SmashUltimate$`Pro Score S/A Tier`))+ geom_point()
+
+plot3 + ggtitle("The Run Speed by Characters and Pro Score Category") + ylab("Run Speed")+xlab("Characters") + stat_summary(SmashUltimate ="max_Run", color="green", size = 1)
+
+```
+In plot one, there was a positive relationship between the meta score rank and Pro-Score rank. Meaning that the more frequent character is played indicates the characters to which professional players are most frequently choosing. This is a possible indication that the character may be better since the more professional players are choosing certain characters more. 
+In plot two, there was no correlation between the weight of the characters and the Pro-Score rank of the characters. This means that the characters chosen at tournaments was not influenced by the Weight of the character. 
+In plot three, there was also no correlation between the Run speed of the characters and the Pro-Score rank of the Characters. This means that the chracters chosen at tournaments was not influenced by the Running Speed of the character. 
+    
+#### 5. Dimensionality Reduction
+```{r}
+ pca_data<- SmashUltimate%>%select(-Character,-Weight,-`Pro Score S/A Tier`,-`Meta Score Rank`,-`Fall Speed`,-`Air Acceleration`)
+```
+    
+
+...
+```{R, echo=F}
+## DO NOT DELETE THIS BLOCK!
+sessionInfo()
+Sys.time()
+Sys.info()
+```
+
+
+
+

@@ -1,0 +1,15 @@
+---
+title: Python
+author: April Baik
+date: '2019-12-15'
+slug: python
+categories: []
+tags: []
+comments: no
+showcomments: yes
+showpagemeta: yes
+---
+
+Python is a high-level programming language used to develop various applications. In SDS348 (Computational Biology), I was given the opportunity to learn and interact with this program. Solely for the purpose of our class, we were introduced to Python scripting, functions, and expressions. What was particularly interesting to me is that for the majority of our class, we were expanding our knowledge through the use of R Studio/R Markdown. By suddenly switching to Python, we were really able to see the differences in each program. Specifically for Python, I found that the coding language was by far more interpretive and challenging. Whereas for R Studio, the coding language is pretty intuitive based on the function you want to launch. For example, in class we specifically studied regular expressions. In order to repesent an expression that is present in a string. Each "code" was equivalent to a pattern in the string you were looking for. When it gets more complicated, like searching through a string or Url's or IP addresses it can get overwhelming. 
+
+

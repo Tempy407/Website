@@ -1,0 +1,19 @@
+---
+title: "Python"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{python}
+import re
+string1="We have to extract these numbers 12, 47, 48 The integers numbers are also interesting: 189 2036 314\',\' is a separator, so please extract these n umbers 125,789,1450 and also these 564,90456 We like to offer you 7890$ per mo
+nth in order to complete this task... we are joking"
+print(string1)
+match=re.match(r"\d+",string1)
+match=re.findall(r"\d+",string1)
+print(match)
+```
+
